@@ -10,15 +10,15 @@
       </tr>
     </thead>
     <tbody>
-{{#each courses}}
-<tr>
-<td>{{title}}</td>
-<td>{{count}}</td>
-<button class="btn btn-small">Delete</button>
-<td>
-
-</td>
-</tr>
+      {{#each courses}}
+        <tr>
+          <td>{{title}}</td>
+          <td>{{count}}</td>
+          <td>
+            <button class='btn btn-small'>Delete</button>
+          </td>
+        </tr>
+      {{/each}}
     </tbody>
   </table>
 {{else}}
