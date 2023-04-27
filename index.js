@@ -16,12 +16,19 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', 'views');
 
-app.use(express.static('public'));
+// app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use('/', homeRoutes); // c префиксом '/', но тогда в контроллере только '/'
 app.use('/add', addRoutes); //c префиксом '/add', но тогда в контроллере только '/'
 app.use('/courses', coursesRoutes); //c префиксом '/courses', но тогда в контроллере только '/'
 app.use('/cart', cartRoutes);
+
+const user = 'dimychyelovets';
+const password = 'UU9LTuJoHfJkMuQ7';
+const url =
+  'mongodb+srv://dimychyelovets:UU9LTuJoHfJkMuQ7@cluster0.feitvkk.mongodb.net/?retryWrites=true&w=majority';
+
 // app.use(express.static('public'));
 // app.use(homeRoutes); //используем контроллер пути '/'
 // app.use(addRoutes); //используем контроллер пути '/add'
