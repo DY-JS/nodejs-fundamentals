@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
 const homeRoutes = require('./routes/home');
 const addRoutes = require('./routes/add');
@@ -10,6 +11,10 @@ const app = express(); //это и есть сервер
 const hbs = exphbs.create({
   defaultLayout: 'main',
   extname: 'hbs',
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  },
 });
 
 app.engine('hbs', hbs.engine);
@@ -24,52 +29,35 @@ app.use('/add', addRoutes); //c префиксом '/add', но тогда в к
 app.use('/courses', coursesRoutes); //c префиксом '/courses', но тогда в контроллере только '/'
 app.use('/cart', cartRoutes);
 
-const user = 'dimychyelovets';
-const password = 'UU9LTuJoHfJkMuQ7';
-const url =
-  'mongodb+srv://dimychyelovets:UU9LTuJoHfJkMuQ7@cluster0.feitvkk.mongodb.net/?retryWrites=true&w=majority';
-
-// app.use(express.static('public'));
 // app.use(homeRoutes); //используем контроллер пути '/'
 // app.use(addRoutes); //используем контроллер пути '/add'
 // app.use(coursesRoutes); //используем контроллер пути '/courses'
 
-////////////////////////////////////////
-// Все контроллеры перенесли в папку routes
-// app.get('/', (req, res) => {
-//   //res.status(200) //по умолчанию
-//   //res.sendFile(path.join(__dirname, 'views', 'index.html'))
-//   res.render('index', {
-//     title: 'Main Page',
-//     isHome: true,
-//   }); //вернули index.hbs
-// });
-
-// app.get('/about', (req, res) => {
-//   //res.sendFile(path.join(__dirname, 'views', 'about.html')) //так отдаём файл без .hbs
-
-//   res.render('about', {
-//     title: 'About Page',
-//     isAbout: true,
-//   }); //вернули about.hbs
-// });
-
-// app.get('/add', (req, res) => {
-//   res.render('add', {
-//     title: 'Add Page',
-//     isAdd: true,
-//   });
-// });
-
-// app.get('/courses', (req, res) => {
-//   res.render('courses', {
-//     title: 'Courses Page',
-//     isCourses: true,
-//   }); //вернули courses.hbs
-// });
+const user = 'dimychyelovets';
+const password = 'UU9LTuJoHfJkMuQ7';
+const url =
+  'mongodb+srv://dimychyelovets:UU9LTuJoHfJkMuQ7@cluster0.feitvkk.mongodb.net/shop';
+// const url =
+//   'mongodb+srv://dimychyelovets:UU9LTuJoHfJkMuQ7@cluster0.feitvkk.mongodb.net/shop';
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+async function start() {
+  try {
+    await mongoose.connect(url, {
+      useNewUrlParser: true,
+      // useFindAndModify: false,
+    });
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+start();
+
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
