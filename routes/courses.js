@@ -6,9 +6,12 @@ const router = Router();
 //router.get('/courses', (req, res) => {
 //в index.js app.use('/courses', coursesRoutes) уже прописан путь /courses поэтому:
 router.get('/', async (req, res) => {
-  //в index.js app.use('/courses', coursesRoutes) поэтому:
   // const courses = await Course.getAll();
-  const courses = await Course.find(); // как getAll() c mongoose
+  //const courses = await Course.find(); // как getAll() c mongoose
+  const courses = await Course.find()
+    .populate('userId', 'email name') //populate - по userId покажет ещё и email и name user
+    .select('price title img'); //select - выберет из сourse - price, title, img
+  console.log(courses);
   res.render('courses', {
     title: 'Courses Page',
     isCourses: true,
