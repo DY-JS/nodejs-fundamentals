@@ -17,6 +17,8 @@ router.post('/', async (req, res) => {
     title: title,
     price: price,
     img: img,
+    //userId: req.user._id, //присвоили user._id из req
+    userId: req.user, //идентична предидущей(mongoose одинаково обработает)
   });
 
   try {

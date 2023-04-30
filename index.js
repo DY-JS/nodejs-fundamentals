@@ -6,6 +6,7 @@ const homeRoutes = require('./routes/home');
 const addRoutes = require('./routes/add');
 const coursesRoutes = require('./routes/courses');
 const cartRoutes = require('./routes/cart');
+const User = require('./models/user');
 const app = express(); //это и есть сервер
 
 const hbs = exphbs.create({
@@ -21,9 +22,20 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', 'views');
 
-// app.use(express.static('public'));
+app.use(async (req, res, next) => {
+  //метод next позволяет исполняться коду дальше
+  try {
+    const user = await User.findById('644ec5043d7b01f6c9f88ec7');
+    req.user = user; //записали user в req.user
+    next();
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+
 app.use('/', homeRoutes); // c префиксом '/', но тогда в контроллере только '/'
 app.use('/add', addRoutes); //c префиксом '/add', но тогда в контроллере только '/'
 app.use('/courses', coursesRoutes); //c префиксом '/courses', но тогда в контроллере только '/'
@@ -48,6 +60,15 @@ async function start() {
       useNewUrlParser: true,
       // useFindAndModify: false,
     });
+    const candidate = await User.findOne();
+    if (!candidate) {
+      const user = new User({
+        email: 'delo@gmail.com',
+        name: 'Dima',
+        cart: { items: [] },
+      });
+      await user.save();
+    }
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });

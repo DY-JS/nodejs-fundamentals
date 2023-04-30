@@ -12,11 +12,11 @@ class Cart {
     const candidate = cart.courses[idx];
 
     if (candidate) {
-      //уже есть курс
+      //если уже есть курс
       candidate.count++;
       cart.courses[idx] = candidate;
     } else {
-      //нужно добавить курс
+      //если в корзине ещё нет - нужно добавить курс
       course.count = 1;
       cart.courses.push(course);
     }

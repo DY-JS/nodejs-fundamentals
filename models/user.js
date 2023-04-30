@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const userSchema = new Schema({
+const user = new Schema({
   email: {
     type: String,
     required: true,
@@ -20,8 +20,9 @@ const userSchema = new Schema({
           default: 1,
         },
         courseId: {
-          type: Schema.Types.ObjectId,
-          ref: 'Course',
+          //cвязали с моделью Course
+          type: Schema.Types.ObjectId, //id для mongoose
+          ref: 'Course', //как в model для модели Course
           required: true,
         },
       },
@@ -29,4 +30,4 @@ const userSchema = new Schema({
   },
 });
 
-module.exports = model('User');
+module.exports = model('User', user);
