@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
-const course = new Schema({
+
+const courseSchema = new Schema({
   //описываем схему модели
   title: {
     type: String,
@@ -17,7 +18,18 @@ const course = new Schema({
   },
 });
 
-module.exports = model('Course', course);
+//c БД приходит course._id, поэтому мы делаем метод чтобы это св-во трансформировать
+//в новое course.id и удалить course._id
+courseSchema.method('toClient', function () {
+  const course = this.toObject();
+
+  course.id = course._id;
+  delete course.id;
+
+  return course;
+});
+
+module.exports = model('Course', courseSchema);
 //экспортируем из ф-ции model схему course
 //поле id mongoose добавляет автоматически
 

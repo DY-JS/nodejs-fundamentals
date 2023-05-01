@@ -6,8 +6,9 @@ const router = Router();
 function mapCartItems(cart) {
   console.log(cart);
   return cart.items.map((c) => ({
-    ...c.courseId._doc,
-    count: c.count, //c.courseId._doc - cвойство courseId без ненужных метаданных
+    ...c.courseId._doc, //c.courseId._doc - cвойство courseId без ненужных метаданных
+    id: c.courseId.id, //c.courseId.id - для id
+    count: c.count,
   }));
 }
 
@@ -48,7 +49,7 @@ router.delete('/remove:id', async (req, res) => {
   const courses = mapCartItems(user.cart);
   const cart = {
     courses,
-    prise: computedPrice(courses),
+    price: computedPrice(courses),
   };
   res.status(200).json(cart);
 });
