@@ -6,6 +6,7 @@ const homeRoutes = require('./routes/home');
 const addRoutes = require('./routes/add');
 const coursesRoutes = require('./routes/courses');
 const cartRoutes = require('./routes/cart');
+const ordersRoutes = require('./routes/orders');
 const User = require('./models/user');
 const app = express(); //это и есть сервер
 
@@ -40,6 +41,7 @@ app.use('/', homeRoutes); // c префиксом '/', но тогда в кон
 app.use('/add', addRoutes); //c префиксом '/add', но тогда в контроллере только '/'
 app.use('/courses', coursesRoutes); //c префиксом '/courses', но тогда в контроллере только '/'
 app.use('/cart', cartRoutes);
+app.use('/orders', ordersRoutes);
 
 // app.use(homeRoutes); //используем контроллер пути '/'
 // app.use(addRoutes); //используем контроллер пути '/add'
