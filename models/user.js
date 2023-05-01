@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const user = new Schema({
+const userSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -30,4 +30,28 @@ const user = new Schema({
   },
 });
 
-module.exports = model('User', user);
+userSchema.methods.addToCart = function (course) {
+  //метод добавления в корзину
+  const items = [...this.cart.items];
+  const idx = items.findIndex((c) => {
+    return c.courseId.toString() === course._id.toString();
+  });
+
+  if (idx >= 0) {
+    items[idx].count = items[idx].count + 1;
+  } else {
+    items.push({
+      courseId: course._id,
+      count: 1,
+    });
+    console.log(items);
+  }
+  // const newCart = { items: items };
+  // this.cart = newCart;
+  this.cart = { items: items };
+  return this.save();
+};
+
+userSchema.methods.removeFromCart = function () {};
+
+module.exports = model('User', userSchema);
