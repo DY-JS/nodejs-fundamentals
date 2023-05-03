@@ -2,11 +2,14 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
+const session = require('express-session');
+const varMiddleware = require('./middleware/variables');
 const homeRoutes = require('./routes/home');
 const addRoutes = require('./routes/add');
 const coursesRoutes = require('./routes/courses');
 const cartRoutes = require('./routes/cart');
 const ordersRoutes = require('./routes/orders');
+const authRoutes = require('./routes/auth');
 const User = require('./models/user');
 const app = express(); //это и есть сервер
 
@@ -23,6 +26,7 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', 'views');
 
+//регистрация роутов - app.use
 app.use(async (req, res, next) => {
   //метод next позволяет исполняться коду дальше
   try {
@@ -36,12 +40,21 @@ app.use(async (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: 'some secret value',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(varMiddleware);
 
 app.use('/', homeRoutes); // c префиксом '/', но тогда в контроллере только '/'
 app.use('/add', addRoutes); //c префиксом '/add', но тогда в контроллере только '/'
 app.use('/courses', coursesRoutes); //c префиксом '/courses', но тогда в контроллере только '/'
 app.use('/cart', cartRoutes);
 app.use('/orders', ordersRoutes);
+app.use('/auth', authRoutes);
 
 // app.use(homeRoutes); //используем контроллер пути '/'
 // app.use(addRoutes); //используем контроллер пути '/add'
